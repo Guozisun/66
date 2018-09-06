@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+	$()
+			.ready(
+					function() {
+						$("login-form input")
+								.blur(
+										function() {
+
+											var $parent = $(this).parent();
+											$parent.find(".msg").remove();
+
+											if ($(this).is("#username")) {
+												var username = $("#username")
+														.val();
+												var pattern = /^[\u4e00-\u9fa5]{1,20}$/;
+												if ($.trim(username) == "") {
+													var errorMsg = "用户名不能为空";
+													//class='msg onError' 中间的空格是层叠样式的格式
+													$parent
+															.append("<span class='msg high'>"
+																	+ errorMsg
+																	+ "</span>");
+													return false;
+												} else if (pattern
+														.test(this.value) == false) {
+													var erroMsg = "请输入中文姓名！";
+													$parent
+															.append("<span class='msg high'>"
+																	+ erroMsg
+																	+ "</span>");
+													return false;
+												} else {
+													var okMsg = " 输入正确";
+													$parent.find(".high")
+															.remove();
+													$parent
+															.append("<span class='msg '>"
+																	+ okMsg
+																	+ "</span>");
+													$("span").delay(2000)
+															.fadeOut(100);
+													return true;
+												}
+
+											}
+
+											if ($(this).is("#password")) {
+												//运用jQuery中的$.trim()方法，去掉首位空格
+												var passwordReg = /^[\\da-zA-Z]{4,20}$/;
+												if ($.trim(this.value) == "") {
+													var errorMsg = " 密码不能为空！";
+													//class='msg onError' 中间的空格是层叠样式的格式
+													$parent
+															.append("<span class='msg high'>"
+																	+ errorMsg
+																	+ "</span>");
+													return false;
+												} else if (passwordReg.test($
+														.trim(this.value)) == false) {
+													var errorMsg = " 请输入6位混合密码";
+													//class='msg onError' 中间的空格是层叠样式的格式
+													$parent
+															.append("<span class='msg high'>"
+																	+ errorMsg
+																	+ "</span>");
+
+												} else {
+													var okMsg = " 输入正确";
+													$parent.find(".high")
+															.remove();
+													$parent
+															.append("<span class='msg '>"
+																	+ okMsg
+																	+ "</span>");
+													return true;
+												}
+											}
+											$("span").delay(2000).fadeOut(100);
+										}).keyup(function() {
+									//triggerHandler 防止事件执行完后，浏览器自动为标签获得焦点
+									$(this).triggerHandler("blur");
+								}).focus(function() {
+									$(this).triggerHandler("blur");
+								});
+						$("#send").click(function() {
+							//trigger 事件执行完后，浏览器会为submit按钮获得焦点
+							$("form input").trigger("blur");
+							var numError = $(".high").length;
+							if (numError) {
+								return false;
+							}
+						});
+
+					});
+</script>
+<title>翻转式用户登录注册界面设计</title>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<style type="text/css">
+.high {
+	color: red;
+	text-align: center;
+}
+
+.msg {
+	font-size: 15px;
+}
+</style>
+</head>
+<body>
+	<div class="jq22-container" style="padding-top: 100px">
+		<div class="login-wrap">
+			<div class="login-html">
+				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label
+					for="tab-1" class="tab">用户登录</label> <input id="tab-2" type="radio"
+					name="tab" class="sign-up"><label for="tab-2" class="tab">用户注册</label>
+				<div class="login-form">
+					<div class="sign-in-htm">
+						<div class="group">
+							<label for="user" class="label">Username</label> <input id="username"
+								type="text" class="input"/>
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Password</label> <input id="password"
+								type="password" class="input" data-type="password">
+						</div>
+						<div class="group">
+							<input id="check" type="checkbox" class="check" checked>
+							<label for="check"><span class="icon"></span> Keep me
+								Signed in</label>
+						</div>
+						<div class="group">
+							<input type="submit" class="button" id="send" value="Sign In">
+						</div>
+
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
